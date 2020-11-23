@@ -180,3 +180,31 @@ __Previous Implementation issues__
     - The library had to be maintained if the database encryption algorithms changed.
     - Use of keyfile had to be implemented in the library to be able to use.
 
+## TL;DR
+### Converting from old KeepassX get syntax to the new syntax.
+
+If you are already familiar with the old KeepassX syntax and use it in your connections, expect commands or some other places in Ásbrú, here is a quick and dirty reference of what you need to know to convert them to the new syntax format and get back to work:
+
+#### Searches are limited to entry location and title.
+The new syntax does not support where searches other than by entry location and title.
+There is no equivalence to `_WHERE_username==`, `_WHERE_password==` or `WHERE_url==` in the new syntax format.
+
+#### Cheat sheet:
+| Old KeepassX GET Syntax                                | New KeepassX GET Syntax                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------:|
+| `<KPXRE_GET_title_WHERE_title==Your_RegExp_here==>`    | `<title\|/Your_KeepassX_Entry_location-and-title>`           |
+| `<KPXRE_GET_username_WHERE_title==Your_RegExp_here==>` | `<username\|/Your_KeepassX_Server-Entry_location-and-title>` |
+| `<KPXRE_GET_password_WHERE_title==Your_RegExp_here==>` | `<password\|/Your_KeepassX_Server-Entry_location-and-title>` |
+| `<KPXRE_GET_url_WHERE_title==Your_RegExp_here==>`      | `<url\|/Your_KeepassX_Server-Entry_location-and-title>`      |
+
+The reason why you have to provide the entry location and title, rather than just its title, is because you might have entries with the same title, provided they are stored in different groups. Read [keepass-organization](https://docs.asbru-cm.net/Manual/Preferences/KeePassXC/#keepass-organization) for further explanation on this.
+
+#### Quick Example:
+1. Let's say I have a group in my KeepassX database called Cloud where I store the entries for all my cloud servers.
+2. Let's say one of those server entries is called CloudApacheServer.
+
+In the old Syntax I could get the URL for this server by using:
+`<KPXRE_GET_url_WHERE_title==CloudApacheServer==>`
+
+In the new Syntax however I should use:
+`<url|/Cloud/CloudApacheServer>`
